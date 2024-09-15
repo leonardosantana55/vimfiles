@@ -63,11 +63,14 @@ map <Leader>fe :Lex<CR>
 
 map <Leader>ssqa :wall!<CR>:mksession! ss.vim<CR>:qa!<CR>
 
-map <Leader>nt :CopyBuffer<CR>:bo term ++rows=10<CR>
+let term_size = 10
 
-tnoremap <C-\> <C-\><C-n>:hide<CR>
+map <Leader>nt :CopyBuffer<CR>:execute ':bo term ++rows=' . term_size<CR>
 
-nnoremap <Leader>\ :unhide<CR><C-w><C-w>i
+nnoremap <Leader>\ :bo sb bin/bash<CR>:execute ':res' . term_size<CR>i
+
+tnoremap <Leader>\  <C-\><C-n>:hide<CR>
+
 
 
 " quotes brackets and parentesis auto match
@@ -88,4 +91,22 @@ vnoremap gg gg0
 vnoremap G G$
 
 command! CopyBuffer let @+ = expand('%:h')
+
+function Test()
+	return 30
+endfunction
+
+function! StartInserInTerm()
+	let term_name = bufname()
+	if term_name == "!/bin/bash"
+		return "i"
+	else
+		echo "dangit"
+	endif
+endfunction
+
+function! Hide()
+	:hide
+endfunction
+
 colorscheme elflord
