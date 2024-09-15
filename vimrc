@@ -71,8 +71,6 @@ nnoremap <Leader>\ :bo sb bin/bash<CR>:execute ':res' . term_size<CR>i
 
 tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 
-
-
 " quotes brackets and parentesis auto match
 inoremap ' ''<left>
 inoremap " ""<left>
@@ -91,22 +89,5 @@ vnoremap gg gg0
 vnoremap G G$
 
 command! CopyBuffer let @+ = expand('%:h')
-
-function Test()
-	return 30
-endfunction
-
-function! StartInserInTerm()
-	let term_name = bufname()
-	if term_name == "!/bin/bash"
-		return "i"
-	else
-		echo "dangit"
-	endif
-endfunction
-
-function! Hide()
-	:hide
-endfunction
 
 colorscheme elflord
