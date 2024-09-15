@@ -67,7 +67,12 @@ let term_size = 10
 
 map <Leader>nt :CopyBuffer<CR>:execute ':bo term ++rows=' . term_size<CR>
 
-nnoremap <Leader>\ :bo sb bin/bash<CR>:execute ':res' . term_size<CR>i
+if has("win32")
+	let term_name = "powershell"
+else
+	let term_name = "bin/bash"
+endif
+nnoremap <Leader>\ :execute ':bo sb ' . term_name<CR>:execute ':res' . term_size<CR>i
 
 tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 
