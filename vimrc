@@ -14,7 +14,7 @@ let g:netrw_altv = 1
 let g:netrw_liststyle = 0
 let g:netrw_winsize = 25
 map <Leader>fe :Lexplore %:p:h<CR>
-
+let g:netrw_keepdir = 0
 
 """"""""set various options for the text editor""""""""
 set sessionoptions+=unix,slash
@@ -115,3 +115,10 @@ colorscheme habamax
 
 "rename all occurences(select text and press key)
 "provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
+
+
+"TODO: create a shortcut to add comment block depending on the current filetype"
+"TODO: check if cursor is in the middle of a word and if true put the quotes
+"around the word
+"TODO: use winheight({nr})}) to set the term_size when executing <Leader>\ to
+"hide
