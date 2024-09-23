@@ -18,6 +18,9 @@ let g:netrw_keepdir = 0
 
 """"""""set various options for the text editor""""""""
 set sessionoptions+=unix,slash
+set autochdir
+set autoindent
+set smartindent
 set splitright
 set splitbelow
 set number
