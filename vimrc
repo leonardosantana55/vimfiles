@@ -40,6 +40,7 @@ set showmode
 set showtabline=1
 set laststatus=2
 set ignorecase
+set statusline+=%F\ %l\:%c
 set hlsearch
 set wrap
 set tw=79
@@ -115,7 +116,11 @@ inoremap {<cr> {}<left><cr><cr><up><tab>
 
 colorscheme habamax
 
-
+function! CommentFunction()
+	let current_line = line(".")
+	call append(current_line, "teste")
+	call append(current_line+1, "teste2")
+endfunc
 "rename all occurences(select text and press key)
 "provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
 
