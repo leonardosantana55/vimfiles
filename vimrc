@@ -1,4 +1,4 @@
-""""""""THIS IS MY VIMRC""""""""
+"""""""THIS IS MY VIMRC""""""""
 
 
 "disables the *compatible* to vi, which causes many bugs and must be at the
@@ -40,15 +40,15 @@ set showmode
 set showtabline=1
 set laststatus=2
 set ignorecase
-set statusline+=%F\ %l\:%c
-set hlsearch
+let session_name=fnamemodify(v:this_session, ':t')
+set statusline=%F\ %{'session_name:'}\%{session_name}\ %=\ %l\:%c\ 
 set wrap
-set tw=79
+set tw=99
 set ts=4
 set shiftwidth=4
 set smartcase
 set incsearch
-set backspace=indent,eol,start
+"set backspace=indent,eol,start
 set scrolloff=10
 set sidescrolloff=10
 if !exists("g:syntax_on")
@@ -91,7 +91,7 @@ command! CopyBuffer let @+ = expand('%:p:h')
 map <Leader>cb :CopyBuffer<CR>
 
 "saves and ends session
-map <Leader>ssqa :wall!<CR>:mksession! ss.vim<CR>:qa!<CR>
+map <Leader>ssqa :wall!<CR>:execute "mksession! " .. v:this_session<CR>:qa!<CR>
 
 "this variable is used in conjuntion with <Leader>nt and <Leader>\
 let term_size = 10
@@ -118,9 +118,22 @@ colorscheme habamax
 
 function! CommentFunction()
 	let current_line = line(".")
-	call append(current_line, "teste")
-	call append(current_line+1, "teste2")
+
+	call append(current_line,	"/******************************************************************************")
+	call append(current_line+1, "*Name:")
+	call append(current_line+2, "*Description")
+	call append(current_line+3, "*")
+	call append(current_line+4, "*")
+	call append(current_line+5, "*Parameters")
+	call append(current_line+6, "*")
+	call append(current_line+7, "*")
+	call append(current_line+8, "*Returns:")
+	call append(current_line+9,	"******************************************************************************/")
+
 endfunc
+
+map <Leader>cf :call CommentFunction()<CR>
+
 "rename all occurences(select text and press key)
 "provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
 
