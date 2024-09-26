@@ -16,11 +16,16 @@ let g:netrw_winsize = 25
 map <Leader>fe :Lexplore %:p:h<CR>
 let g:netrw_keepdir = 0
 
+""""""""config statusline""""""""
+"autocmd VimEnter * is used here to load that config after everything else
+autocmd VimEnter * let session_name=fnamemodify(v:this_session, ':t')
+autocmd VimEnter * set statusline=%F\ %{'session_name:'}\%{session_name}\ %=\ %l\:%c\ 
+
 """"""""set various options for the text editor""""""""
 set sessionoptions+=unix,slash
 set autochdir
-set autoindent
-set smartindent
+set! autoindent
+set! smartindent
 set splitright
 set splitbelow
 set number
@@ -40,8 +45,6 @@ set showmode
 set showtabline=1
 set laststatus=2
 set ignorecase
-let session_name=fnamemodify(v:this_session, ':t')
-set statusline=%F\ %{'session_name:'}\%{session_name}\ %=\ %l\:%c\ 
 set wrap
 set tw=99
 set ts=4
@@ -116,23 +119,49 @@ inoremap {<cr> {}<left><cr><cr><up><tab>
 
 colorscheme habamax
 
+
+""""""""comment snipets stuff for C programming""""""""
 function! CommentFunction()
 	let current_line = line(".")
 
 	call append(current_line,	"/******************************************************************************")
 	call append(current_line+1, "*Name:")
-	call append(current_line+2, "*Description")
+	call append(current_line+2, "*Description:")
 	call append(current_line+3, "*")
 	call append(current_line+4, "*")
-	call append(current_line+5, "*Parameters")
+	call append(current_line+5, "*Parameters:")
 	call append(current_line+6, "*")
 	call append(current_line+7, "*")
 	call append(current_line+8, "*Returns:")
 	call append(current_line+9,	"******************************************************************************/")
-
 endfunc
 
-map <Leader>cf :call CommentFunction()<CR>
+map <Leader>cf :call CommentFunction()<CR>2jA
+
+function! CommentVariable()
+	normal $
+	let current_col = col(".")
+	let ideal_comment_col = 50
+	let distance = ideal_comment_col - current_col
+	
+	let var_comment = "/* ??? */"
+	if distance <= 0
+		call append(line(".")-1, join(["    ",var_comment],""))
+		normal Jx
+	else
+		let spaces = ""
+		while distance > 0
+			let spaces = join([' ', spaces],"")
+			let distance -= 1
+		endwhile
+		call append(line("."), var_comment)
+		normal J
+		execute ':normal a' .. spaces
+	endif
+endfunc
+
+map <Leader>cc :call CommentVariable()<CR>2wviw
+
 
 "rename all occurences(select text and press key)
 "provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
