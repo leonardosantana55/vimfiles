@@ -7,7 +7,7 @@ if &cp | set nocp | endif
 
 let mapleader=" "
 
-""""""""config for netwr""""""""
+""""""""CONFIG FOR NETWR""""""""
 let g:netrw_banner = 0 "to toggle use I
 ""let g:netrw_browse_split = 4 "same as using P
 let g:netrw_altv = 1
@@ -16,12 +16,14 @@ let g:netrw_winsize = 25
 map <Leader>fe :Lexplore %:p:h<CR>
 let g:netrw_keepdir = 0
 
-""""""""config statusline""""""""
-"autocmd VimEnter * is used here to load that config after everything else
+
+""""""""CONFIG STATUSLINE""""""""
+"autocmd VimEnter * is used here to load the config after everything else
 autocmd VimEnter * let session_name=fnamemodify(v:this_session, ':t')
 autocmd VimEnter * set statusline=%F\ %{'session_name:'}\%{session_name}\ %=\ %l\:%c\ 
 
-""""""""set various options for the text editor""""""""
+
+""""""""SET VARIOUS OPTIONS FOR THE TEXT EDITOR""""""""
 set sessionoptions+=unix,slash
 set autochdir
 set! autoindent
@@ -62,7 +64,7 @@ if has("win32")
 endif
 
 
-""""""""mostly mappings for the normal mode text editor""""""""
+""""""""MOSTLY MAPPINGS FOR THE NORMAL MODE TEXT EDITOR""""""""
 map <Leader>cs :nohlsearch<CR>
 map <Leader>ws :w<CR>:source<CR>
 if has("win32")
@@ -80,7 +82,7 @@ vnoremap G G$
 map <Leader>d "_d
 
 
-""""""Terminal config stuff""""""
+""""""TERMINAL CONFIG STUFF""""""
 if has("win32")
 	let term_name = "powershell"
 else
@@ -105,22 +107,41 @@ nnoremap <Leader>\ :execute ':bo sb ' . term_name<CR>:execute ':res' . term_size
 tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 
 
-""""""""quotes brackets and parentesis auto match""""""""
-inoremap ' ''<left>
-inoremap " ""<left>
-inoremap ( ()<left>
+""""""""QUOTES BRACKETS AND PARENTESIS AUTO MATCH""""""""
+"inoremap ' ''<left>
+inoremap " "
+"inoremap [ []<left>
+"inoremap ( ()<left>
+"inoremap { {}<left>
+inoremap "" ""<left>
+inoremap '' ''<left>
 inoremap () ()<left>
-inoremap [ []<left>
 inoremap [] []<left>
-inoremap { {}<left>
 inoremap {} {}<left>
-inoremap {<cr> {}<left><cr><cr><up><tab>
+inoremap {<cr> {<cr>}<left><cr><up><tab>| " this mapping only works with smartinend and autoindent
+"vnoremap <Leader>" s""<left><esc>p
+"vnoremap <Leader>' s''<left><esc>p
+"vnoremap <Leader>( s()<left><esc>p
+"vnoremap <Leader>[ s[]<left><esc>p
+"vnoremap <Leader>{ s{}<left><esc>p
+"vnoremap <Leader>/ s/**/<left><left><esc>p
 
-
+vnoremap <Leader>" <esc>a"<esc>`<i"
+vnoremap <Leader>' <esc>a"<esc>`<i"
+vnoremap <Leader>( <esc>a"<esc>`<i"
+vnoremap <Leader>[ <esc>a"<esc>`<i"
+vnoremap <Leader>{ <esc>a"<esc>`<i"
+vnoremap <Leader>/ <esc>a*/<esc>`<i/*
+"vnoremap } }k$
+"vnoremap { {j0
+"
+"nnoremap } }k$
+"nnoremap { {j0
+"
 colorscheme habamax
 
 
-""""""""comment snipets stuff for C programming""""""""
+""""""""COMMENT SNIPETS STUFF FOR C PROGRAMMING""""""""
 function! CommentFunction()
 	let current_line = line(".")
 
