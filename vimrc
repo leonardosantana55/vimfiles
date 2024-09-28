@@ -1,11 +1,10 @@
 """""""THIS IS MY VIMRC""""""""
 
-
 "disables the *compatible* to vi, which causes many bugs and must be at the
 "beginning of the vimrc file.
 if &cp | set nocp | endif
-
 let mapleader=" "
+
 
 """"""""CONFIG FOR NETWR""""""""
 let g:netrw_banner = 0 "to toggle use I
@@ -13,14 +12,14 @@ let g:netrw_banner = 0 "to toggle use I
 let g:netrw_altv = 1
 let g:netrw_liststyle = 0
 let g:netrw_winsize = 25
-map <Leader>fe :Lexplore %:p:h<CR>
+map <Leader>fe :Lexplore %:p:h<CR>-<CR>
 let g:netrw_keepdir = 0
 
 
 """"""""CONFIG STATUSLINE""""""""
 "autocmd VimEnter * is used here to load the config after everything else
 autocmd VimEnter * let session_name=fnamemodify(v:this_session, ':t')
-autocmd VimEnter * set statusline=%F\ %{'session_name:'}\%{session_name}\ %=\ %l\:%c\ 
+autocmd VimEnter * set statusline=%F\ %{'SESSION_NAME:'}\%{session_name}\ %=\ %l\:%c\ 
 
 
 """"""""SET VARIOUS OPTIONS FOR THE TEXT EDITOR""""""""
@@ -31,6 +30,7 @@ set! smartindent
 set splitright
 set splitbelow
 set number
+set relativenumber
 set title
 if has("win32")
 	set clipboard=unnamed
@@ -38,7 +38,6 @@ else
 	set clipboard=unnamedplus
 endif
 set nobackup
-set relativenumber
 set ignorecase
 set showcmd
 set wildmenu
@@ -53,14 +52,18 @@ set ts=4
 set shiftwidth=4
 set smartcase
 set incsearch
-"set backspace=indent,eol,start
+set backspace=indent,eol,start
 set scrolloff=10
 set sidescrolloff=10
 if !exists("g:syntax_on")
     syntax enable
 endif
 if has("win32") 
-	set shell=C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe
+	try
+		set shell=C:\PowerShell-7.4.5-win-x64\pwsh.exe
+	catch
+		set shell=C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe
+	endtry	
 endif
 
 
@@ -78,8 +81,7 @@ map G G$
 vnoremap gg gg0
 vnoremap G G$
 
-"deletes without overwriting the register
-map <Leader>d "_d
+map <Leader>d "_d|                               " deletes without overwriting the register
 
 
 """"""TERMINAL CONFIG STUFF""""""
@@ -88,63 +90,35 @@ if has("win32")
 else
 	let term_name = "bin/bash"
 endif
-
 command! CopyBuffer let @+ = expand('%:p:h')
-
-"this function is used in conjuntion with <Leader>nt. You just need to cd and
-"paste its value to load the terminal for the current files path
-map <Leader>cb :CopyBuffer<CR>
-
-"saves and ends session
-map <Leader>ssqa :wall!<CR>:execute "mksession! " .. v:this_session<CR>:qa!<CR>
-
-"this variable is used in conjuntion with <Leader>nt and <Leader>\
-let term_size = 10
-
+map <Leader>cb :CopyBuffer<CR>|                  " used in conjuntion with <Leader>nt. cd and paste it on terminal
+map <Leader>ssqa :wall!<CR>:execute "mksession! " .. v:this_session<CR>:qa!<CR>| " saves and ends session
+let term_size = 10                               " this variable is used in conjuntion with <Leader>nt and <Leader>
 map <Leader>nt :CopyBuffer<CR>:execute ':bo term ++rows=' . term_size<CR>
-
 nnoremap <Leader>\ :execute ':bo sb ' . term_name<CR>:execute ':res' . term_size<CR>i
 tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 
 
 """"""""QUOTES BRACKETS AND PARENTESIS AUTO MATCH""""""""
-"inoremap ' ''<left>
-inoremap " "
-"inoremap [ []<left>
-"inoremap ( ()<left>
-"inoremap { {}<left>
 inoremap "" ""<left>
 inoremap '' ''<left>
 inoremap () ()<left>
 inoremap [] []<left>
 inoremap {} {}<left>
 inoremap {<cr> {<cr>}<left><cr><up><tab>| " this mapping only works with smartinend and autoindent
-"vnoremap <Leader>" s""<left><esc>p
-"vnoremap <Leader>' s''<left><esc>p
-"vnoremap <Leader>( s()<left><esc>p
-"vnoremap <Leader>[ s[]<left><esc>p
-"vnoremap <Leader>{ s{}<left><esc>p
-"vnoremap <Leader>/ s/**/<left><left><esc>p
-
+inoremap (" ("")<left><left>
+"surround word o paragraph
 vnoremap <Leader>" <esc>a"<esc>`<i"
 vnoremap <Leader>' <esc>a"<esc>`<i"
 vnoremap <Leader>( <esc>a"<esc>`<i"
 vnoremap <Leader>[ <esc>a"<esc>`<i"
 vnoremap <Leader>{ <esc>a"<esc>`<i"
 vnoremap <Leader>/ <esc>a*/<esc>`<i/*
-"vnoremap } }k$
-"vnoremap { {j0
-"
-"nnoremap } }k$
-"nnoremap { {j0
-"
-colorscheme habamax
 
 
 """"""""COMMENT SNIPETS STUFF FOR C PROGRAMMING""""""""
 function! CommentFunction()
 	let current_line = line(".")
-
 	call append(current_line,	"/******************************************************************************")
 	call append(current_line+1, "*Name:")
 	call append(current_line+2, "*Description:")
@@ -156,8 +130,6 @@ function! CommentFunction()
 	call append(current_line+8, "*Returns:")
 	call append(current_line+9,	"******************************************************************************/")
 endfunc
-
-map <Leader>cf :call CommentFunction()<CR>2jA
 
 function! CommentVariable()
 	normal $
@@ -181,7 +153,11 @@ function! CommentVariable()
 	endif
 endfunc
 
+map <Leader>cf :call CommentFunction()<CR>2jA
 map <Leader>cc :call CommentVariable()<CR>2wviw
+
+
+colorscheme habamax
 
 
 "rename all occurences(select text and press key)
