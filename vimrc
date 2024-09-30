@@ -24,7 +24,7 @@ autocmd VimEnter * set statusline=%F\ %{'SESSION_NAME:'}\%{session_name}\ %=\ %l
 
 """"""""SET VARIOUS OPTIONS FOR THE TEXT EDITOR""""""""
 set sessionoptions+=unix,slash
-set autochdir
+set autochdir                 " new terminal opens in current files dir 
 set! autoindent
 set! smartindent
 set splitright
@@ -39,19 +39,19 @@ else
 endif
 set nobackup
 set ignorecase
+set smartcase
 set showcmd
 set wildmenu
 set wildmode=list:full
 set showmode
 set showtabline=1
 set laststatus=2
-set ignorecase
 set wrap
 set tw=99
 set ts=4
 set shiftwidth=4
-set smartcase
 set incsearch
+set hlsearch
 set backspace=indent,eol,start
 set scrolloff=10
 set sidescrolloff=10
@@ -134,7 +134,7 @@ endfunc
 function! CommentVariable()
 	normal $
 	let current_col = col(".")
-	let ideal_comment_col = 50
+	let ideal_comment_col = 40
 	let distance = ideal_comment_col - current_col
 	
 	let var_comment = "/* ??? */"
@@ -169,3 +169,4 @@ colorscheme habamax
 "around the word
 "TODO: use winheight({nr})}) to set the term_size when executing <Leader>\ to
 "hide
+"TODO: create a command that pushes vimrc to git
