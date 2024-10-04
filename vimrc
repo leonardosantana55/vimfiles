@@ -24,7 +24,7 @@ autocmd VimEnter * set statusline=%F\ %{'SESSION_NAME:'}\%{session_name}\ %=\ %l
 
 """"""""SET VARIOUS OPTIONS FOR THE TEXT EDITOR""""""""
 set sessionoptions+=unix,slash
-set autochdir                 " new terminal opens in current files dir 
+set autochdir                          " new terminal opens in current files dir 
 set! autoindent
 set! smartindent
 set splitright
@@ -33,9 +33,9 @@ set number
 set relativenumber
 set title
 if has("win32")
-	set clipboard=unnamed
+    set clipboard=unnamed
 else
-	set clipboard=unnamedplus
+    set clipboard=unnamedplus
 endif
 set nobackup
 set ignorecase
@@ -46,50 +46,56 @@ set wildmode=list:full
 set showmode
 set showtabline=1
 set laststatus=2
-set wrap
-set tw=99
-set ts=4
+set nowrap
+set sidescroll=5
+set scrolloff=5
+set sidescrolloff=5
+set list
+set lcs=tab:»»,multispace:____,lead:\ ,extends:»,trail:•
+set textwidth=79
+set tabstop=4
+set expandtab                          "spaces are more reliable for formating accros devices
 set shiftwidth=4
 set incsearch
 set hlsearch
 set backspace=indent,eol,start
-set scrolloff=10
-set sidescrolloff=10
+set belloff=all                        "stops annoying bell 
 if !exists("g:syntax_on")
     syntax enable
-endif
+endif 
 if has("win32") 
-	try
-		set shell=C:\PowerShell-7.4.5-win-x64\pwsh.exe
-	catch
-		set shell=C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe
-	endtry	
+    try
+        set shell=C:\PowerShell-7.4.5-win-x64\pwsh.exe
+    catch
+        set shell=C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe
+    endtry  
 endif
 
 
 """"""""MOSTLY MAPPINGS FOR THE NORMAL MODE TEXT EDITOR""""""""
 map <Leader>cs :nohlsearch<CR>
-map <Leader>ws :w<CR>:source<CR>
+map <Leader>ws :w<CR>:source<CR>:nohlsearch<CR>|           "last command is for clearing the annoying search highligth
 if has("win32")
-	map <Leader>cv :vs<CR>:edit $MYVIMRC<cr>
+    map <Leader>cv :vs<CR>:edit $MYVIMRC<cr>
 else
-	map <Leader>cv :vs<CR>:edit ~/.vim/vimfiles/vimrc<cr>
+    map <Leader>cv :vs<CR>:edit ~/.vim/vimfiles/vimrc<cr>
 endif
-
+"the original behavior can be done with [[ and ]]
 map gg gg0
 map G G$
 vnoremap gg gg0
 vnoremap G G$
 
-map <Leader>d "_d|                               " deletes without overwriting the register
+map <Leader>d "_d|                     " deletes without overwriting the register
 
 
 """"""TERMINAL CONFIG STUFF""""""
 if has("win32")
-	let term_name = "powershell"
+    let term_name = "powershell"
 else
-	let term_name = "bin/bash"
+    let term_name = "bin/bash"
 endif
+"new terminal functionallity
 command! CopyBuffer let @+ = expand('%:p:h')
 map <Leader>cb :CopyBuffer<CR>|                  " used in conjuntion with <Leader>nt. cd and paste it on terminal
 map <Leader>ssqa :wall!<CR>:execute "mksession! " .. v:this_session<CR>:qa!<CR>| " saves and ends session
@@ -100,62 +106,55 @@ tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 
 
 """"""""QUOTES BRACKETS AND PARENTESIS AUTO MATCH""""""""
-inoremap "" ""<left>
-inoremap '' ''<left>
-inoremap () ()<left>
-inoremap [] []<left>
-inoremap {} {}<left>
-inoremap {<cr> {<cr>}<left><cr><up><tab>| " this mapping only works with smartinend and autoindent
-inoremap (" ("")<left><left>
-"surround word o paragraph
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+inoremap {<cr> {<cr>}<left><cr><up><tab>| " this mapping only works with smartinend and autoindent surround selection
 vnoremap <Leader>" <esc>a"<esc>`<i"
-vnoremap <Leader>' <esc>a"<esc>`<i"
-vnoremap <Leader>( <esc>a"<esc>`<i"
-vnoremap <Leader>[ <esc>a"<esc>`<i"
-vnoremap <Leader>{ <esc>a"<esc>`<i"
+vnoremap <Leader>' <esc>a'<esc>`<i'
+vnoremap <Leader>( <esc>a)<esc>`<i(
+vnoremap <Leader>[ <esc>a]<esc>`<i[
+vnoremap <Leader>{ <esc>a}<esc>`<i{
 vnoremap <Leader>/ <esc>a*/<esc>`<i/*
 
 
 """"""""COMMENT SNIPETS STUFF FOR C PROGRAMMING""""""""
 function! CommentFunction()
-	let current_line = line(".")
-	call append(current_line,	"/******************************************************************************")
-	call append(current_line+1, "*Name:")
-	call append(current_line+2, "*Description:")
-	call append(current_line+3, "*")
-	call append(current_line+4, "*")
-	call append(current_line+5, "*Parameters:")
-	call append(current_line+6, "*")
-	call append(current_line+7, "*")
-	call append(current_line+8, "*Returns:")
-	call append(current_line+9,	"******************************************************************************/")
+    let current_line = line(".")
+    call append(current_line,   "/******************************************************************************")
+    call append(current_line+1, "*Name:")
+    call append(current_line+2, "*Description:")
+    call append(current_line+3, "*")
+    call append(current_line+4, "*")
+    call append(current_line+5, "*Parameters:")
+    call append(current_line+6, "*")
+    call append(current_line+7, "*")
+    call append(current_line+8, "*Returns:")
+    call append(current_line+9, "******************************************************************************/")
 endfunc
 
+"use this function to start comments aways on the same ideal_comment_col or 12 spaces away from last char
 function! CommentVariable()
-	normal $
-	let current_col = col(".")
-	let ideal_comment_col = 40
-	let distance = ideal_comment_col - current_col
-	
-	let var_comment = "/* ??? */"
-	if distance <= 0
-		call append(line(".")-1, join(["    ",var_comment],""))
-		normal Jx
-	else
-		let spaces = ""
-		while distance > 0
-			let spaces = join([' ', spaces],"")
-			let distance -= 1
-		endwhile
-		call append(line("."), var_comment)
-		normal J
-		execute ':normal a' .. spaces
-	endif
+    normal $
+    let current_col = col(".")
+    let ideal_comment_col = 40
+    let distance = ideal_comment_col - current_col
+    "if it is longer put 12 spaces
+    if distance <= 0
+        call feedkeys("a            ",'t')
+    else
+        while distance > 0
+            call feedkeys("a \<esc>",'t')
+            let distance -= 1
+        endwhile
+    endif
+    normal a
 endfunc
 
 map <Leader>cf :call CommentFunction()<CR>2jA
-map <Leader>cc :call CommentVariable()<CR>2wviw
-
+map <Leader>cc :call CommentVariable()<CR>
 
 colorscheme habamax
 
@@ -164,9 +163,3 @@ colorscheme habamax
 "provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
 
 
-"TODO: create a shortcut to add comment block depending on the current filetype"
-"TODO: check if cursor is in the middle of a word and if true put the quotes
-"around the word
-"TODO: use winheight({nr})}) to set the term_size when executing <Leader>\ to
-"hide
-"TODO: create a command that pushes vimrc to git
