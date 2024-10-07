@@ -52,6 +52,10 @@ set scrolloff=5
 set sidescrolloff=5
 set list
 set lcs=tab:»»,multispace:____,lead:\ ,extends:»,trail:•
+set formatoptions=
+set formatoptions+=t
+set formatoptions+=c
+set formatoptions+=r
 set textwidth=79
 set tabstop=4
 set expandtab                          "spaces are more reliable for formating accros devices
@@ -87,6 +91,11 @@ vnoremap gg gg0
 vnoremap G G$
 
 map <Leader>d "_d|                     " deletes without overwriting the register
+
+"move line up and down"
+nnoremap <F4> :move +1<CR>
+nnoremap <F5> :move -2<CR>
+
 
 
 """"""TERMINAL CONFIG STUFF""""""
@@ -162,4 +171,6 @@ colorscheme habamax
 "rename all occurences(select text and press key)
 "provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
 
+"TODO: usar :move para criar funcionalidade de arrastar linhas pra cima ou pra baixo"
+"TODO: criar autocomment on newline"
 
