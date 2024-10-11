@@ -56,7 +56,7 @@ set formatoptions=
 set formatoptions+=t
 set formatoptions+=c
 set formatoptions+=r
-set textwidth=79
+set textwidth=100
 set tabstop=4
 set expandtab                          "spaces are more reliable for formating accros devices
 set shiftwidth=4
@@ -115,12 +115,37 @@ tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 
 
 """"""""QUOTES BRACKETS AND PARENTESIS AUTO MATCH""""""""
-inoremap " ""<left>
-inoremap ' ''<left>
-inoremap ( ()<left>
-inoremap [ []<left>
-inoremap { {}<left>
+function! InsertMatchPair(char, match)
+" checks if cursor has chars in front of it
+    let next_char = getline(".")[col(".")] 
+    let line = getline('.')
+    if next_char == "" || next_char == " " || next_char == a:char 
+    \ || next_char == a:match[1]
+    \ || next_char == '"'
+    \ || next_char == "'"
+    \ || next_char == ")"
+    \ || next_char == "]"
+    \ || next_char == "}"
+        call setline('.', strpart(line, 0, col('.') ) . a:match . strpart(line, col('.') ))
+    else
+        if col('.') == 1
+            call setline('.', strpart(line, 0, col('.') -1 ) . a:char . strpart(line, col('.') -1 ))
+        else
+            call setline('.', strpart(line, 0, col('.') ) . a:char . strpart(line, col('.') ))
+        endif
+    endif
+    call cursor('.', col('.')+2)
+    execute ':start'
+endfunc
+
+inoremap " <esc>:call InsertMatchPair('"', '""')<CR>
+inoremap ' <esc>:call InsertMatchPair("'", "''")<CR>
+inoremap ( <esc>:call InsertMatchPair('(', '()')<CR>
+inoremap [ <esc>:call InsertMatchPair('[', '[]')<CR>
+inoremap { <esc>:call InsertMatchPair('{', '{}')<CR>
+
 inoremap {<cr> {<cr>}<left><cr><up><tab>| " this mapping only works with smartinend and autoindent surround selection
+
 vnoremap <Leader>" <esc>a"<esc>`<i"
 vnoremap <Leader>' <esc>a'<esc>`<i'
 vnoremap <Leader>( <esc>a)<esc>`<i(
@@ -150,9 +175,9 @@ function! CommentVariable()
     let current_col = col(".")
     let ideal_comment_col = 40
     let distance = ideal_comment_col - current_col
-    "if it is longer put 12 spaces
+    "if it is longer put 4 spaces
     if distance <= 0
-        call feedkeys("a            ",'t')
+        call feedkeys("a    ",'t')
     else
         while distance > 0
             call feedkeys("a \<esc>",'t')
@@ -171,6 +196,6 @@ colorscheme habamax
 "rename all occurences(select text and press key)
 "provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
 
-"TODO: usar :move para criar funcionalidade de arrastar linhas pra cima ou pra baixo"
 "TODO: criar autocomment on newline"
+
 
