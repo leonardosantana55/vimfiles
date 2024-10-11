@@ -44,7 +44,7 @@ set showcmd
 set wildmenu
 set wildmode=list:full
 set showmode
-set showtabline=1
+set showtabline=2
 set laststatus=2
 set nowrap
 set sidescroll=5
@@ -68,14 +68,12 @@ if !exists("g:syntax_on")
     syntax enable
 endif 
 if has("win32") 
-    try
-        set shell=C:\PowerShell-7.4.5-win-x64\pwsh.exe
-    catch
-        set shell=C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe
-    endtry  
+    if executable("C:\\Program Files\\PowerShell\\7\\pwsh") == 1
+        set shell=\"C:\\Program\ Files\\PowerShell\\7\\pwsh\"
+    else
+        set shell=C:\\PowerShell-7.4.5-win-x64\\pwsh.exe"
+    endif
 endif
-
-
 """"""""MOSTLY MAPPINGS FOR THE NORMAL MODE TEXT EDITOR""""""""
 map <Leader>cs :nohlsearch<CR>
 map <Leader>ws :w<CR>:source<CR>:nohlsearch<CR>|           "last command is for clearing the annoying search highligth
