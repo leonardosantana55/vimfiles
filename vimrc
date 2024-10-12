@@ -1,18 +1,19 @@
 """""""THIS IS MY VIMRC""""""""
+" in this config i try to create a portable vim with little functionality added. Always trying to leave
+" vim as it is and keeping the customization to a minimum, thus also keeping side effects to a minimum.
 
-"disables the *compatible* to vi, which causes many bugs and must be at the
-"beginning of the vimrc file.
+" disables the *compatible* to vi, which causes many bugs. Must be at the beginning of the vimrc file.
 if &cp | set nocp | endif
 let mapleader=" "
 
 
 """"""""CONFIG FOR NETWR""""""""
-let g:netrw_banner = 0 "to toggle use I
-""let g:netrw_browse_split = 4 "same as using P
+let g:netrw_banner = 0                 " to toggle it, use I
+""let g:netrw_browse_split = 4         " same as using P
 let g:netrw_altv = 1
 let g:netrw_liststyle = 0
 let g:netrw_winsize = 25
-map <Leader>fe :Lexplore %:p:h<CR>-<CR>
+map <Leader>fe :Lexplore %:p:h<CR>-<CR>| " <CR>-<CR> is a quick fix for a bug
 let g:netrw_keepdir = 0
 
 
@@ -67,13 +68,7 @@ set belloff=all                        "stops annoying bell
 if !exists("g:syntax_on")
     syntax enable
 endif 
-if has("win32") 
-    if executable("C:\\Program Files\\PowerShell\\7\\pwsh") == 1
-        set shell=\"C:\\Program\ Files\\PowerShell\\7\\pwsh\"
-    else
-        set shell=C:\\PowerShell-7.4.5-win-x64\\pwsh.exe"
-    endif
-endif
+
 """"""""MOSTLY MAPPINGS FOR THE NORMAL MODE TEXT EDITOR""""""""
 map <Leader>cs :nohlsearch<CR>
 map <Leader>ws :w<CR>:source<CR>:nohlsearch<CR>|           "last command is for clearing the annoying search highligth
@@ -82,7 +77,7 @@ if has("win32")
 else
     map <Leader>cv :vs<CR>:edit ~/.vim/vimfiles/vimrc<cr>
 endif
-"the original behavior can be done with [[ and ]]
+"the original behavior is accomplished with [[ and ]]
 map gg gg0
 map G G$
 vnoremap gg gg0
@@ -94,27 +89,37 @@ map <Leader>d "_d|                     " deletes without overwriting the registe
 nnoremap <F4> :move +1<CR>
 nnoremap <F5> :move -2<CR>
 
-
+nnoremap <F9> @:
 
 """"""TERMINAL CONFIG STUFF""""""
+if has("win32") 
+    if executable("C:\\Program Files\\PowerShell\\7\\pwsh") == 1    " check if the executable exists
+        set shell=\"C:\\Program\ Files\\PowerShell\\7\\pwsh\"    " my pc
+    else
+        set shell=C:\\PowerShell-7.4.5-win-x64\\pwsh.exe"    " engies pc
+    endif
+endif
+
 if has("win32")
     let term_name = "powershell"
 else
     let term_name = "bin/bash"
 endif
-"new terminal functionallity
+"new terminal functionality
 command! CopyBuffer let @+ = expand('%:p:h')
-map <Leader>cb :CopyBuffer<CR>|                  " used in conjuntion with <Leader>nt. cd and paste it on terminal
+map <Leader>cb :CopyBuffer<CR>|                  " used in conjunction with <Leader>nt. cd and paste it on terminal
 map <Leader>ssqa :wall!<CR>:execute "mksession! " .. v:this_session<CR>:qa!<CR>| " saves and ends session
-let term_size = 10                               " this variable is used in conjuntion with <Leader>nt and <Leader>
+let term_size = 10                               " used in conjunction with <Leader>nt and <Leader>
 map <Leader>nt :CopyBuffer<CR>:execute ':bo term ++rows=' . term_size<CR>
 nnoremap <Leader>\ :execute ':bo sb ' . term_name<CR>:execute ':res' . term_size<CR>i
 tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 
 
-""""""""QUOTES BRACKETS AND PARENTESIS AUTO MATCH""""""""
+""""""""QUOTES BRACKETS AND PARENTHESIS AUTO MATCH""""""""
 function! InsertMatchPair(char, match)
-" checks if cursor has chars in front of it
+" checks if cursor has chars in front of it.
+" has a side effect that affect commenting many lines at once with visual block + <S-i>
+" it is overcome by using a simple macro instead.
     let next_char = getline(".")[col(".")] 
     let line = getline('.')
     if next_char == "" || next_char == " " || next_char == a:char 
@@ -142,7 +147,7 @@ inoremap ( <esc>:call InsertMatchPair('(', '()')<CR>
 inoremap [ <esc>:call InsertMatchPair('[', '[]')<CR>
 inoremap { <esc>:call InsertMatchPair('{', '{}')<CR>
 
-inoremap {<cr> {<cr>}<left><cr><up><tab>| " this mapping only works with smartinend and autoindent surround selection
+inoremap {<cr> {<cr>}<left><cr><up><tab>| " this mapping only works with smart indent and auto indent surround.
 
 vnoremap <Leader>" <esc>a"<esc>`<i"
 vnoremap <Leader>' <esc>a'<esc>`<i'
@@ -152,7 +157,7 @@ vnoremap <Leader>{ <esc>a}<esc>`<i{
 vnoremap <Leader>/ <esc>a*/<esc>`<i/*
 
 
-""""""""COMMENT SNIPETS STUFF FOR C PROGRAMMING""""""""
+""""""""COMMENT SNIPPETS STUFF FOR C PROGRAMMING"""""""
 function! CommentFunction()
     let current_line = line(".")
     call append(current_line,   "/******************************************************************************")
@@ -167,13 +172,13 @@ function! CommentFunction()
     call append(current_line+9, "******************************************************************************/")
 endfunc
 
-"use this function to start comments aways on the same ideal_comment_col or 12 spaces away from last char
+" use this function to start comments always on the same ideal_comment_col or 12 spaces away from last char
 function! CommentVariable()
     normal $
     let current_col = col(".")
     let ideal_comment_col = 40
     let distance = ideal_comment_col - current_col
-    "if it is longer put 4 spaces
+    " if it is a long line put 4 spaces
     if distance <= 0
         call feedkeys("a    ",'t')
     else
@@ -191,9 +196,8 @@ map <Leader>cc :call CommentVariable()<CR>
 colorscheme habamax
 
 
-"rename all occurences(select text and press key)
-"provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
+" rename all occurrences(select text and press key)
+" provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
 
-"TODO: criar autocomment on newline"
 
 
