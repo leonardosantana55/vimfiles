@@ -1,5 +1,5 @@
 """""""THIS IS MY VIMRC""""""""
-" in this config i try to create a portable vim with little functionality added. Always trying to leave
+" in this config I try to create a portable vim with little functionality added. Always trying to leave
 " vim as it is and keeping the customization to a minimum, thus also keeping side effects to a minimum.
 
 " disables the *compatible* to vi, which causes many bugs. Must be at the beginning of the vimrc file.
@@ -118,11 +118,22 @@ tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 """"""""QUOTES BRACKETS AND PARENTHESIS AUTO MATCH""""""""
 function! InsertMatchPair(char, match)
 " checks if cursor has chars in front of it.
-" has a side effect that affect commenting many lines at once with visual block + <S-i>
-" it is overcome by using a simple macro instead.
+" has a side effect that affects commenting many lines at once with visual block + <S-i>
+" but its overcome by using a simple macro instead.
+
     let next_char = getline(".")[col(".")] 
     let line = getline('.')
-    if next_char == "" || next_char == " " || next_char == a:char 
+
+" maily for closing brackets, but works on same char also.
+    if next_char == a:char
+        echo "do nothing"
+        execute ':start'
+        call cursor( line('.'), col('.') + 2)
+        return
+    endif
+
+" handles openning brackets behavior only
+    if next_char == "" || next_char == " " || next_char == a:char
     \ || next_char == a:match[1]
     \ || next_char == '"'
     \ || next_char == "'"
@@ -131,13 +142,14 @@ function! InsertMatchPair(char, match)
     \ || next_char == "}"
         call setline('.', strpart(line, 0, col('.') ) . a:match . strpart(line, col('.') ))
     else
-        if col('.') == 1
+        if col('.') == 1                " edge case when cursor is on first column and it is not empty
             call setline('.', strpart(line, 0, col('.') -1 ) . a:char . strpart(line, col('.') -1 ))
         else
             call setline('.', strpart(line, 0, col('.') ) . a:char . strpart(line, col('.') ))
         endif
     endif
-    call cursor('.', col('.')+2)
+
+    call cursor('.', col('.')+2)       " positions cursor at the rigth place and in insert mode
     execute ':start'
 endfunc
 
@@ -146,6 +158,10 @@ inoremap ' <esc>:call InsertMatchPair("'", "''")<CR>
 inoremap ( <esc>:call InsertMatchPair('(', '()')<CR>
 inoremap [ <esc>:call InsertMatchPair('[', '[]')<CR>
 inoremap { <esc>:call InsertMatchPair('{', '{}')<CR>
+
+inoremap ) <esc>:call InsertMatchPair(')', ')')<CR>
+inoremap ] <esc>:call InsertMatchPair(']', ']')<CR>
+inoremap } <esc>:call InsertMatchPair('}', '}')<CR>
 
 inoremap {<cr> {<cr>}<left><cr><up><tab>| " this mapping only works with smart indent and auto indent surround.
 
