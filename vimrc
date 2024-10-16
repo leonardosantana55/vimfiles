@@ -126,7 +126,6 @@ function! InsertMatchPair(char, match)
 
 " maily for closing brackets, but works on same char also.
     if next_char == a:char
-        echo "do nothing"
         execute ':start'
         call cursor( line('.'), col('.') + 2)
         return
