@@ -19,8 +19,20 @@ let g:netrw_keepdir = 0
 
 """"""""CONFIG STATUSLINE""""""""
 "autocmd VimEnter * is used here to load the config after everything else
+
+autocmd VimEnter * set statusline=%#StatusLine#
+autocmd VimEnter * set statusline+=%F
+autocmd VimEnter * set statusline+=\ %#DiffAdd#
+autocmd VimEnter * set statusline+=%m
+autocmd VimEnter * set statusline+=%#StatusLine#
+autocmd VimEnter * set statusline+=%<
 autocmd VimEnter * let session_name=fnamemodify(v:this_session, ':t')
-autocmd VimEnter * set statusline=%F\ %{'SESSION_NAME:'}\%{session_name}\ %=\ %l\:%c\ 
+autocmd VimEnter * set statusline+=\ %{'SESSION_NAME:'}\%{session_name}
+autocmd VimEnter * set statusline+=%=
+autocmd VimEnter * set statusline+=%n
+autocmd VimEnter * set statusline+=\ %p%%
+autocmd VimEnter * set statusline+=\ %l\:%c
+autocmd VimEnter * set statusline+=\ 
 
 
 """"""""SET VARIOUS OPTIONS FOR THE TEXT EDITOR""""""""
