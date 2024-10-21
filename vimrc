@@ -27,7 +27,7 @@ autocmd VimEnter * set statusline+=%m
 autocmd VimEnter * set statusline+=%#StatusLine#
 autocmd VimEnter * set statusline+=%<
 autocmd VimEnter * let session_name=fnamemodify(v:this_session, ':t')
-autocmd VimEnter * set statusline+=\ %{'SESSION_NAME:'}\%{session_name}
+autocmd VimEnter * set statusline+=\ %{'s('}\%{session_name}\%{')'}
 autocmd VimEnter * set statusline+=%=
 autocmd VimEnter * set statusline+=%n
 autocmd VimEnter * set statusline+=\ %p%%
@@ -54,8 +54,10 @@ set nobackup
 set ignorecase
 set smartcase
 set showcmd
+set wildoptions=pum
 set wildmenu
-set wildmode=list:full
+" set wildmode=list:full
+set wildmode=full
 set showmode
 set showtabline=2
 set laststatus=2
@@ -64,7 +66,7 @@ set sidescroll=5
 set scrolloff=5
 set sidescrolloff=5
 set list
-set lcs=tab:»»,multispace:____,lead:\ ,extends:»,trail:•
+set lcs=tab:»\ ,multispace:____,lead:\ ,extends:»,trail:•
 set formatoptions=
 set formatoptions+=t
 set formatoptions+=c
@@ -77,6 +79,7 @@ set incsearch
 set hlsearch
 set backspace=indent,eol,start
 set belloff=all                        "stops annoying bell 
+set cursorline
 if !exists("g:syntax_on")
     syntax enable
 endif 
@@ -155,6 +158,9 @@ function! InsertMatchPair(char, match)
     else
         if col('.') == 1                " edge case when cursor is on first column and it is not empty
             call setline('.', strpart(line, 0, col('.') -1 ) . a:char . strpart(line, col('.') -1 ))
+            execute ':start'
+            call cursor('.', col('.')+1)       " positions cursor at the rigth place and in insert mode
+            return
         else
             call setline('.', strpart(line, 0, col('.') ) . a:char . strpart(line, col('.') ))
         endif
