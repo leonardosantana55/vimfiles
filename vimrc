@@ -8,12 +8,30 @@ let mapleader=" "
 
 
 """"""""CONFIG FOR NETWR""""""""
+
+function! Explorer()
+    let original_win_id = win_getid()
+    try
+        execute ":Rexplore"
+    catch
+        execute ":Explore"
+    endtry
+    let current_win_id = win_getid()
+    if original_win_id != current_win_id
+        execute ":q"
+        call win_gotoid(original_win_id)
+        execute ":Explore"
+    endif
+endfunc
+
+
 let g:netrw_banner = 0                 " to toggle it, use I
 ""let g:netrw_browse_split = 4         " same as using P
 let g:netrw_altv = 1
 let g:netrw_liststyle = 0
 let g:netrw_winsize = 25
-map <Leader>fe :Lexplore %:p:h<CR>-<CR>| " <CR>-<CR> is a quick fix for a bug
+" map <Leader>fe :Lexplore %:p:h<CR>-<CR>| " <CR>-<CR> is a quick fix for a bug :Lexplore is cursed
+map <Leader>fe :call Explorer()<CR>
 let g:netrw_keepdir = 0
 
 
@@ -79,7 +97,7 @@ set incsearch
 set hlsearch
 set backspace=indent,eol,start
 set belloff=all                        "stops annoying bell 
-set cursorline
+" set cursorline
 if !exists("g:syntax_on")
     syntax enable
 endif 
