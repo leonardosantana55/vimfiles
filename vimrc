@@ -262,10 +262,12 @@ map <Leader>cf :call CommentFunction()<CR>2jA
 map <Leader>cc :call CommentVariable()<CR>
 
 colorscheme habamax
+autocmd VimEnter * execute ':source ~/.vim/vimfiles/vimrc'
 
 
 " rename all occurrences(select text and press key)
 " provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
+
 
 
 
