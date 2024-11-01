@@ -84,6 +84,23 @@ if !exists("g:syntax_on")
     syntax enable
 endif 
 
+if &term =~ 'xterm' || &term == 'win32'
+    " Use DECSCUSR escape sequences
+    let &t_SI = "\e[5 q"    " blink bar
+    let &t_SR = "\e[3 q"    " blink underline
+    let &t_EI = "\e[1 q"    " blink block
+    let &t_ti ..= "\e[1 q"  " blink block
+    let &t_te ..= "\e[0 q"  " default (depends on terminal, normally blink
+                " block)
+    endif
+"let &t_SI = "\e[5 q"    " blink bar
+"let &t_SR = "\e[3 q"    " blink underline
+"let &t_EI = "\e[1 q"    " blink block
+
+"let &t_SI = "\<esc>[5 q"  " blinking I-beam in insert mode
+"let &t_SR = "\<esc>[3 q"  " blinking underline in replace mode
+"let &t_EI = "\<esc>[ q"  " default cursor (usually blinking block) otherwise
+
 """"""""MOSTLY MAPPINGS FOR THE NORMAL MODE TEXT EDITOR""""""""
 map <Leader>cs :nohlsearch<CR>
 map <Leader>ws :w<CR>:source<CR>:nohlsearch<CR>|           "last command is for clearing the annoying search highligth
