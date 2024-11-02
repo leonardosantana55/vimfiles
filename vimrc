@@ -13,6 +13,9 @@ function! Explorer()
     let original_win_id = win_getid()
     try
         execute ":Rexplore"
+        if &filetype == "netrw"
+            execute ":cd %"
+        endif
     catch
         execute ":Explore"
     endtry
@@ -23,6 +26,7 @@ function! Explorer()
         execute ":Explore"
     endif
 endfunc
+
 
 
 let g:netrw_banner = 0                 " to toggle it, use I
