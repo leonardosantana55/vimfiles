@@ -9,6 +9,8 @@ let mapleader=" "
 
 """"""""CONFIG FOR NETWR""""""""
 
+
+" probably this one is useless now
 function! Explorer()
     let original_win_id = win_getid()
     try
@@ -27,6 +29,14 @@ function! Explorer()
     endif
 endfunc
 
+function! Explorer2()
+    if &filetype != "netrw"
+        execute ":Explore"
+    else
+        execute ":Rexplore"
+    endif
+endfunc
+
 
 
 let g:netrw_banner = 0                 " to toggle it, use I
@@ -35,7 +45,7 @@ let g:netrw_altv = 1
 let g:netrw_liststyle = 0
 let g:netrw_winsize = 25
 " map <Leader>fe :Lexplore %:p:h<CR>-<CR>| " <CR>-<CR> is a quick fix for a bug :Lexplore is cursed
-map <Leader>fe :call Explorer()<CR>
+map <Leader>fe :call Explorer2()<CR>
 let g:netrw_keepdir = 0
 
 
@@ -95,6 +105,7 @@ set formatoptions+=c
 set formatoptions+=r
 set textwidth=100
 set tabstop=4
+set softtabstop=-1
 set expandtab                          "spaces are more reliable for formating accros devices
 set shiftwidth=4
 set incsearch
@@ -143,10 +154,26 @@ map <Leader>d "_d|                     " deletes without overwriting the registe
 nnoremap <F4> :move +1<CR>
 nnoremap <F5> :move -2<CR>
 
-nnoremap <F9> @:
+nnoremap <F9> @:|                       " repeat last command
+
+"im ready for vim hard mode, im a grown up now, im a man
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
+
+vnoremap <Up> <Nop>
+vnoremap <Down> <Nop>
+vnoremap <Left> <Nop>
+vnoremap <Right> <Nop>
 
 """"""TERMINAL CONFIG STUFF""""""
-if has("win32") 
+if has("win32")
     if executable("C:\\Program Files\\PowerShell\\7\\pwsh") == 1    " check if the executable exists
         set shell=\"C:\\Program\ Files\\PowerShell\\7\\pwsh\"    " my pc
     else
@@ -171,6 +198,7 @@ tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 
 """"""""QUOTES BRACKETS AND PARENTHESIS AUTO MATCH""""""""
 function! InsertMatchPair(char, match)
+" TODO: Find a way to remedy that bug below.
 " checks if cursor has chars in front of it.
 " has a side effect that affects commenting many lines at once with visual block + <S-i>
 " but its overcome by using a simple macro instead.
@@ -271,7 +299,4 @@ autocmd VimEnter * execute ':source ~/.vim/vimfiles/vimrc'
 
 " rename all occurrences(select text and press key)
 " provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
-
-
-
-
+" TODO: find a way to detect CAPSLOCK ON and alert in some way "
