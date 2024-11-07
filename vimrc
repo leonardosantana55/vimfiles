@@ -294,7 +294,12 @@ map <Leader>cf :call CommentFunction()<CR>2jA
 map <Leader>cc :call CommentVariable()<CR>
 
 colorscheme habamax
-autocmd VimEnter * execute ':source ~/.vim/vimfiles/vimrc'
+
+if has("win32")
+    autocmd VimEnter * execute ':source $MYVIMRC'
+else
+    autocmd VimEnter * execute ':source ~/.vim/vimfiles/vimrc'
+endif
 
 
 " rename all occurrences(select text and press key)
