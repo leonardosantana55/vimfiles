@@ -9,26 +9,6 @@ let mapleader=" "
 
 """"""""CONFIG FOR NETWR""""""""
 
-
-" probably this one is useless now
-function! Explorer()
-    let original_win_id = win_getid()
-    try
-        execute ":Rexplore"
-        if &filetype == "netrw"
-            execute ":cd %"
-        endif
-    catch
-        execute ":Explore"
-    endtry
-    let current_win_id = win_getid()
-    if original_win_id != current_win_id
-        execute ":q"
-        call win_gotoid(original_win_id)
-        execute ":Explore"
-    endif
-endfunc
-
 function! Explorer2()
     if &filetype != "netrw"
         execute ":Explore"
@@ -36,8 +16,6 @@ function! Explorer2()
         execute ":Rexplore"
     endif
 endfunc
-
-
 
 let g:netrw_banner = 0                 " to toggle it, use I
 ""let g:netrw_browse_split = 4         " same as using P
@@ -156,6 +134,10 @@ nnoremap <F5> :move -2<CR>
 
 nnoremap <F9> @:|                       " repeat last command
 
+command! CopyBuffer let @+ = expand('%:p:h')
+map <Leader>cb :CopyBuffer<CR>|                  " used in conjunction with <Leader>nt. cd and paste it on terminal
+map <Leader>ssqa :wall!<CR>:execute "mksession! " .. v:this_session<CR>:qa!<CR>| " saves and ends session
+
 "im ready for vim hard mode, im a grown up now, im a man
 noremap <Up> <Nop>
 noremap <Down> <Nop>
@@ -173,6 +155,8 @@ vnoremap <Left> <Nop>
 vnoremap <Right> <Nop>
 
 """"""TERMINAL CONFIG STUFF""""""
+
+" init
 if has("win32")
     if executable("C:\\Program Files\\PowerShell\\7\\pwsh") == 1    " check if the executable exists
         set shell=\"C:\\Program\ Files\\PowerShell\\7\\pwsh\"    " my pc
@@ -186,14 +170,28 @@ if has("win32")
 else
     let term_name = "bin/bash"
 endif
-"new terminal functionality
-command! CopyBuffer let @+ = expand('%:p:h')
-map <Leader>cb :CopyBuffer<CR>|                  " used in conjunction with <Leader>nt. cd and paste it on terminal
-map <Leader>ssqa :wall!<CR>:execute "mksession! " .. v:this_session<CR>:qa!<CR>| " saves and ends session
+
 let term_size = 10                               " used in conjunction with <Leader>nt and <Leader>
-map <Leader>nt :CopyBuffer<CR>:execute ':bo term ++rows=' . term_size<CR>
-nnoremap <Leader>\ :execute ':bo sb ' . term_name<CR>:execute ':res' . term_size<CR>i
+
+" map <Leader>nt :CopyBuffer<CR>:execute ':bo term ++rows=' . term_size<CR>
+" nnoremap <Leader>\ :execute ':bo sb ' . term_name<CR>:execute ':res' . term_size<CR>i
+
+function! TermCreate()
+    let buf_info = getbufinfo()->matchfuzzy(g:term_name, {'key' : 'name'})
+    if len(buf_info) == 0
+        execute ':bo term ++rows=' .. g:term_size
+    else
+        execute ':bo sb ' . g:term_name 
+        execute ':res' . g:term_size
+        normal i
+    endif
+endfunc
+
+nnoremap <Leader>\ :call TermCreate()<CR>
 tnoremap <Leader>\  <C-\><C-n>:hide<CR>
+" TODO: make a function that jumps to the window that athe terminal is in and hides it
+" win_getid()
+" win_gotoid()
 
 
 """"""""QUOTES BRACKETS AND PARENTHESIS AUTO MATCH""""""""
