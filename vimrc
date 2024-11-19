@@ -172,7 +172,7 @@ else
 endif
 
 let term_size = 10                               " used in conjunction with <Leader>nt and <Leader>
-
+let term_bufname = term_name
 " map <Leader>nt :CopyBuffer<CR>:execute ':bo term ++rows=' . term_size<CR>
 " nnoremap <Leader>\ :execute ':bo sb ' . term_name<CR>:execute ':res' . term_size<CR>i
 
@@ -180,10 +180,19 @@ function! TermCreate()
     let buf_info = getbufinfo()->matchfuzzy(g:term_name, {'key' : 'name'})
     if len(buf_info) == 0
         execute ':bo term ++rows=' .. g:term_size
+        let g:term_bufname = bufname()
+        return
     else
-        execute ':bo sb ' . g:term_name 
-        execute ':res' . g:term_size
-        normal i
+        if bufname() == g:term_bufname
+            return
+        endif
+        if getbufinfo(g:term_bufname)[0].hidden == 1
+            execute ':bo sb ' . g:term_name 
+            execute ':res' . g:term_size
+            normal i
+        else
+            call win_gotoid(win_findbuf(bufnr(g:term_name))[0])
+        endif
     endif
 endfunc
 
@@ -192,6 +201,21 @@ tnoremap <Leader>\  <C-\><C-n>:hide<CR>
 " TODO: make a function that jumps to the window that athe terminal is in and hides it
 " win_getid()
 " win_gotoid()
+" got to use the mode() == 't' function"
+function HideOnlyTerm()
+    if mode() == 't'
+        execute ":hide"
+    else
+        execute "echo not a term"
+    endif
+endfunc
+
+
+function Test()
+    feedkeys("\<C-\>")
+    feedkeys("\<C-n>")
+endfunc
+
 
 
 """"""""QUOTES BRACKETS AND PARENTHESIS AUTO MATCH""""""""
