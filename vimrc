@@ -95,6 +95,7 @@ if !exists("g:syntax_on")
     syntax enable
 endif 
 
+" make cursor blink
 if &term =~ 'xterm' || &term == 'win32'
     " Use DECSCUSR escape sequences
     let &t_SI = "\e[5 q"    " blink bar
@@ -104,13 +105,7 @@ if &term =~ 'xterm' || &term == 'win32'
     let &t_te ..= "\e[0 q"  " default (depends on terminal, normally blink
                 " block)
     endif
-"let &t_SI = "\e[5 q"    " blink bar
-"let &t_SR = "\e[3 q"    " blink underline
-"let &t_EI = "\e[1 q"    " blink block
 
-"let &t_SI = "\<esc>[5 q"  " blinking I-beam in insert mode
-"let &t_SR = "\<esc>[3 q"  " blinking underline in replace mode
-"let &t_EI = "\<esc>[ q"  " default cursor (usually blinking block) otherwise
 
 """"""""MOSTLY MAPPINGS FOR THE NORMAL MODE TEXT EDITOR""""""""
 map <Leader>cs :nohlsearch<CR>
@@ -177,15 +172,16 @@ let term_bufname = term_name
 " nnoremap <Leader>\ :execute ':bo sb ' . term_name<CR>:execute ':res' . term_size<CR>i
 
 function! TermCreate()
+    " toggle on and off a terminal on the botton of the screen"
+
+    " we can have only one terminal at a time."
     let buf_info = getbufinfo()->matchfuzzy(g:term_name, {'key' : 'name'})
     if len(buf_info) == 0
         execute ':bo term ++rows=' .. g:term_size
         let g:term_bufname = bufname()
         return
     else
-        if bufname() == g:term_bufname
-            return
-        endif
+        " prevent creating aditional window for term buffer"
         if getbufinfo(g:term_bufname)[0].hidden == 1
             execute ':bo sb ' . g:term_name 
             execute ':res' . g:term_size
@@ -198,32 +194,13 @@ endfunc
 
 nnoremap <Leader>\ :call TermCreate()<CR>
 tnoremap <Leader>\  <C-\><C-n>:hide<CR>
-" TODO: make a function that jumps to the window that athe terminal is in and hides it
-" win_getid()
-" win_gotoid()
-" got to use the mode() == 't' function"
-function HideOnlyTerm()
-    if mode() == 't'
-        execute ":hide"
-    else
-        execute "echo not a term"
-    endif
-endfunc
-
-
-function Test()
-    feedkeys("\<C-\>")
-    feedkeys("\<C-n>")
-endfunc
-
-
+tnoremap <esc><esc> <C-\><C-n>
 
 """"""""QUOTES BRACKETS AND PARENTHESIS AUTO MATCH""""""""
 function! InsertMatchPair(char, match)
-" TODO: Find a way to remedy that bug below.
-" checks if cursor has chars in front of it.
+" checks if cursor has chars in front of it and adds a maching pair of some chars
 " has a side effect that affects commenting many lines at once with visual block + <S-i>
-" but its overcome by using a simple macro instead.
+" is overcome by <Leader>" or <Leader>#. Other chars might be added latter
 
     let next_char = getline(".")[col(".")] 
     let line = getline('.')
@@ -314,6 +291,10 @@ endfunc
 
 map <Leader>cf :call CommentFunction()<CR>2jA
 map <Leader>cc :call CommentVariable()<CR>
+
+" comment out multiple lines
+nnoremap <Leader># :normal!0i#<CR>
+nnoremap <Leader>" :normal!0i"<CR>
 
 colorscheme habamax
 
