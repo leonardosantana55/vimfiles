@@ -293,8 +293,8 @@ map <Leader>cf :call CommentFunction()<CR>2jA
 map <Leader>cc :call CommentVariable()<CR>
 
 " comment out multiple lines
-nnoremap <Leader># :normal!0i#<CR>
-nnoremap <Leader>" :normal!0i"<CR>
+nnoremap <Leader>co :normal!0i
+
 
 colorscheme habamax
 
