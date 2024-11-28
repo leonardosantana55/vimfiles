@@ -192,8 +192,13 @@ function! TermCreate()
     endif
 endfunc
 
+function! TermHidenResize()
+    let g:term_size = winheight(0)
+    execute ':hide'
+endfunc
+
 nnoremap <Leader>\ :call TermCreate()<CR>
-tnoremap <Leader>\  <C-\><C-n>:hide<CR>
+tnoremap <Leader>\  <C-\><C-n>:call TermHidenResize()<CR>
 tnoremap <esc><esc> <C-\><C-n>
 
 """"""""QUOTES BRACKETS AND PARENTHESIS AUTO MATCH""""""""
