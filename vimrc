@@ -304,7 +304,13 @@ else
     autocmd VimEnter * execute ':source ~/.vim/vimfiles/vimrc'
 endif
 
-
 " rename all occurrences(select text and press key)
 " provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
 " TODO: find a way to detect CAPSLOCK ON and alert in some way "
+
+
+
+
+" TIPS: 
+" To format a json file run the command :%!python -m json.tool"
+" To change every ocurrence and ask for confirmation, use :%s/{oldpattern}/{newpattern}/gc"
