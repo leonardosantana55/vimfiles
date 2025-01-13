@@ -115,11 +115,12 @@ if has("win32")
 else
     map <Leader>cv :vs<CR>:edit ~/.vim/vimfiles/vimrc<cr>
 endif
-"the original behavior is accomplished with [[ and ]]
 map gg gg0
 map G G$
 vnoremap gg gg0
 vnoremap G G$
+nmap ]] /[{}]<CR>:nohlsearch<CR>
+nmap [[ ?[{}]<CR>:nohlsearch<CR>
 
 map <Leader>d "_d|                     " deletes without overwriting the register
 
