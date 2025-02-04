@@ -125,8 +125,8 @@ nmap [[ ?[{}]<CR>:nohlsearch<CR>
 map <Leader>d "_d|                     " deletes without overwriting the register
 
 "move line up and down"
-nnoremap <F4> :move +1<CR>
-nnoremap <F5> :move -2<CR>
+nnoremap <F5> :move +1<CR>
+nnoremap <F6> :move -2<CR>
 
 nnoremap <F9> @:|                       " repeat last command
 
