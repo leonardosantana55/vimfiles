@@ -263,18 +263,28 @@ vnoremap <Leader>/ <esc>a*/<esc>`<i/*
 
 
 """"""""COMMENT SNIPPETS STUFF FOR C PROGRAMMING"""""""
+" function! CommentFunction()
+"     let current_line = line(".")
+"     call append(current_line,   "/******************************************************************************")
+"     call append(current_line+1, "*Name:")
+"     call append(current_line+2, "*Description:")
+"     call append(current_line+3, "*")
+"     call append(current_line+4, "*")
+"     call append(current_line+5, "*Parameters:")
+"     call append(current_line+6, "*")
+"     call append(current_line+7, "*")
+"     call append(current_line+8, "*Returns:")
+"     call append(current_line+9, "******************************************************************************/")
+" endfunc
+
 function! CommentFunction()
     let current_line = line(".")
     call append(current_line,   "/******************************************************************************")
-    call append(current_line+1, "*Name:")
-    call append(current_line+2, "*Description:")
-    call append(current_line+3, "*")
-    call append(current_line+4, "*")
-    call append(current_line+5, "*Parameters:")
-    call append(current_line+6, "*")
-    call append(current_line+7, "*")
-    call append(current_line+8, "*Returns:")
-    call append(current_line+9, "******************************************************************************/")
+    call append(current_line+1, "*Function Description:")
+    call append(current_line+2, "")
+    call append(current_line+3, "")
+    call append(current_line+4, "")
+    call append(current_line+5, "******************************************************************************/")
 endfunc
 
 " use this function to start comments always on the same ideal_comment_col or 12 spaces away from last char
