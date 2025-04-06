@@ -82,14 +82,12 @@ set formatoptions+=t
 set formatoptions+=c
 set formatoptions+=r
 set textwidth=0
-set colorcolumn=100
+" set colorcolumn=80
 " But set it to 100 chars when editing Kotlin.
 " autocmd filetype kotlin setlocal colorcolumn=100
-
-
 " Only show the colorcolumn in the current window.
-autocmd WinLeave * set colorcolumn=0
-autocmd WinEnter * set colorcolumn=+0
+" autocmd WinLeave * set colorcolumn=0
+" autocmd WinEnter * set colorcolumn=80
 
 set tabstop=4
 set softtabstop=-1
@@ -333,9 +331,6 @@ else
     autocmd VimEnter * execute ':source ~/.vim/vimfiles/vimrc'
 endif
 
-" rename all occurrences(select text and press key)
-" provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
-" TODO: find a way to detect CAPSLOCK ON and alert in some way "
 
 function DelPreviousBuffer()
     let buffer_name = bufname()
