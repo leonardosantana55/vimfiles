@@ -333,7 +333,7 @@ endif
 
 
 function DelBuffer()
-
+" delete buffer like :bd but without closing the current window"
     let buffer_count = len(getbufinfo({'buflisted':1}))
     let buffer_name = bufname()
 
@@ -346,6 +346,7 @@ function DelBuffer()
 
 endfunc
 
+map <Leader>bd :call DelBuffer()<CR>
 
 
 
