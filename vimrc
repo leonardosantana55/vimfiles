@@ -332,10 +332,17 @@ else
 endif
 
 
-function DelPreviousBuffer()
+function DelBuffer()
+
+    let buffer_count = len(getbufinfo({'buflisted':1}))
     let buffer_name = bufname()
-    execute ':b#'
-    execute ':bd' . buffer_name
+
+    if buffer_count > 1
+        execute ':b#'
+        execute ':bd ' . buffer_name
+    else
+        execute ':echo cant delete'
+    endif
 
 endfunc
 
