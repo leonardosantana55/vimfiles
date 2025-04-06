@@ -81,7 +81,16 @@ set formatoptions=
 set formatoptions+=t
 set formatoptions+=c
 set formatoptions+=r
-set textwidth=100
+set textwidth=0
+set colorcolumn=100
+" But set it to 100 chars when editing Kotlin.
+" autocmd filetype kotlin setlocal colorcolumn=100
+
+
+" Only show the colorcolumn in the current window.
+autocmd WinLeave * set colorcolumn=0
+autocmd WinEnter * set colorcolumn=+0
+
 set tabstop=4
 set softtabstop=-1
 set expandtab                          "spaces are more reliable for formating accros devices
@@ -202,7 +211,9 @@ nnoremap <Leader>\ :call TermCreate()<CR>
 tnoremap <Leader>\  <C-\><C-n>:call TermHidenResize()<CR>
 tnoremap <esc><esc> <C-\><C-n>
 
+
 """"""""QUOTES BRACKETS AND PARENTHESIS AUTO MATCH""""""""
+
 function! InsertMatchPair(char, match)
 " checks if cursor has chars in front of it and adds a maching pair of some chars
 " has a side effect that affects commenting many lines at once with visual block + <S-i>
@@ -313,6 +324,8 @@ nnoremap <Leader>co :normal!0i
 
 
 colorscheme habamax
+highlight ColorColumn ctermfg=0 ctermbg=7
+
 
 if has("win32")
     autocmd VimEnter * execute ':source $MYVIMRC'
@@ -323,6 +336,13 @@ endif
 " rename all occurrences(select text and press key)
 " provavelmente está errado vnoremap: <Leader>ra "\"hy:%s/\\<<C-r>h\\>//g<left><left>>") 
 " TODO: find a way to detect CAPSLOCK ON and alert in some way "
+
+function DelPreviousBuffer()
+    let buffer_name = bufname()
+    execute ':b#'
+    execute ':bd' . buffer_name
+
+endfunc
 
 
 
