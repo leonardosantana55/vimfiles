@@ -323,6 +323,8 @@ nnoremap <Leader>co :normal!0i
 
 colorscheme habamax
 highlight ColorColumn ctermfg=0 ctermbg=7
+" transparent background"
+hi Normal guibg=NONE ctermbg=NONE
 
 
 if has("win32")
