@@ -129,7 +129,9 @@ vnoremap G G$
 nmap ]] /[{}]<CR>:nohlsearch<CR>
 nmap [[ ?[{}]<CR>:nohlsearch<CR>
 
-map <Leader>d "_d|                     " deletes without overwriting the register
+map <Leader>d "dd|                     " deletes without overwriting the register
+" Don't touch unnamed register when pasting over visual selection
+xnoremap <expr> p 'pgv"' . v:register . 'y'
 
 "move line up and down"
 nnoremap <F5> :move +1<CR>
