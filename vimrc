@@ -323,6 +323,8 @@ map <Leader>cc :call CommentVariable()<CR>
 nnoremap <Leader>co :normal!0i
 
 
+" sets custom path for colorscheme. Default is ~/.vim/colors"
+set runtimepath=$HOME.vim,~/.vim/vimfiles/colors,.
 colorscheme habamax
 highlight ColorColumn ctermfg=0 ctermbg=7
 " transparent background"
