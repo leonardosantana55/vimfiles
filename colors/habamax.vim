@@ -137,7 +137,7 @@ if s:t_Co >= 256
 "   hi VertSplit ctermfg=243 ctermbg=243 cterm=NONE
   hi TabLine ctermfg=234 ctermbg=243 cterm=NONE
 "   hi TabLineFill ctermfg=234 ctermbg=243 cterm=NONE
-"   hi TabLineSel ctermfg=234 ctermbg=247 cterm=bold
+   hi TabLineSel ctermfg=250 ctermbg=235 cterm=bold
   hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
   hi ToolbarButton ctermfg=243 ctermbg=234 cterm=bold,reverse
   hi QuickFixLine ctermfg=234 ctermbg=67 cterm=NONE
